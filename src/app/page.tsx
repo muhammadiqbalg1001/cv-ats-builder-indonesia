@@ -216,7 +216,7 @@ export default function CVBuilderPage() {
         <div className="w-[210mm] min-h-[297mm] bg-white p-[10mm] shadow-xl print:shadow-none print:m-0 text-black font-sans leading-tight">
           
           <header className="text-center border-b border-black pb-3 mb-4">
-            <h1 className="text-3xl font-semibold capitalize">{data.personal.fullName || 'Nama Lengkap'}</h1>
+            <h1 className="text-3xl font-bold uppercase">{data.personal.fullName || 'Nama Lengkap'}</h1>
             <p className="text-lg mt-1 font-semibold text-gray-800">{data.personal.position}</p>
             
             <div className="flex flex-wrap justify-center items-center gap-2 text-sm mt-2 font-medium">
