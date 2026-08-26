@@ -2,15 +2,15 @@
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
-// Perbaikan: Memaksa Next.js untuk mengambil komponen 'default' dari react-quill
 const ReactQuill = dynamic(
   () => import('react-quill').then((mod) => mod.default || mod), 
   { ssr: false }
 );
 
+// Tambahkan 'link' di dalam array toolbar
 const modules = {
   toolbar: [
-    ['bold', 'italic', 'underline'],
+    ['bold', 'italic', 'underline', 'link'], // <-- Tombol link sekarang aktif
     [{ list: 'ordered' }, { list: 'bullet' }],
     ['clean']
   ],
