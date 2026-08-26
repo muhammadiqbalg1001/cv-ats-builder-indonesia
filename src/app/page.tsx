@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useCVState } from '../hooks/useCVState';
+import { useCVState } from '../hooks/useCVStates';
 import RichEditor from '../components/RichEditor';
 
 const formatBulanTahun = (dateString: string) => {
