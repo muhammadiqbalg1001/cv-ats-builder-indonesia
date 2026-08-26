@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useCVState } from '@/hooks/useCVStates';
+import { useCVState } from '../hooks/useCVState';
 import RichEditor from '../components/RichEditor';
 
 const formatBulanTahun = (dateString: string) => {
@@ -19,9 +19,7 @@ export default function CVBuilderPage() {
 
   const handleDownloadPDF = () => {
     const originalTitle = document.title;
-    
     const baseName = data.personal.fullName.trim().replace(/\s+/g, '_') || 'CV_ATS';
-    
     let fileName = baseName;
 
     if (data.experience && data.experience.length > 0) {
@@ -30,7 +28,6 @@ export default function CVBuilderPage() {
       const bulanArray = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       const month = bulanArray[today.getMonth()];
       const year = today.getFullYear();
-      
       fileName = `${baseName}_Update_${day}_${month}_${year}`;
     }
 
@@ -38,12 +35,10 @@ export default function CVBuilderPage() {
 
     setTimeout(() => {
       window.print();
-      
       setTimeout(() => {
         document.title = originalTitle;
         clearCache();
       }, 1000);
-      
     }, 100);
   };
 
@@ -86,7 +81,7 @@ export default function CVBuilderPage() {
               <input type="text" placeholder="Domisili (ex: Jakarta, Indonesia)" className="p-2 border rounded" value={data.personal.domicile} onChange={e => setData({...data, personal: {...data.personal, domicile: e.target.value}})} />
               <input type="text" placeholder="No. HP" className="p-2 border rounded" value={data.personal.phone} onChange={e => setData({...data, personal: {...data.personal, phone: e.target.value}})} />
               <input type="email" placeholder="Email" className="p-2 border rounded" value={data.personal.email} onChange={e => setData({...data, personal: {...data.personal, email: e.target.value}})} />
-              <input type="text" placeholder="LinkedIn URL" className="p-2 border rounded" value={data.personal.linkedin} onChange={e => setData({...data, personal: {...data.personal, linkedin: e.target.value}})} />
+              <input type="text" placeholder="LinkedIn URL / Username" className="p-2 border rounded" value={data.personal.linkedin} onChange={e => setData({...data, personal: {...data.personal, linkedin: e.target.value}})} />
               <div className="flex gap-2">
                 <select className="p-2 border rounded w-1/3" value={data.personal.socialType} onChange={e => setData({...data, personal: {...data.personal, socialType: e.target.value as any}})}>
                   <option value="Github">Github</option><option value="Instagram">Instagram</option><option value="X">X (Twitter)</option>
@@ -221,17 +216,54 @@ export default function CVBuilderPage() {
         <div className="w-[210mm] min-h-[297mm] bg-white p-[10mm] shadow-xl print:shadow-none print:m-0 text-black font-sans leading-tight">
           
           <header className="text-center border-b border-black pb-3 mb-4">
-            <h1 className="text-3xl font-bold uppercase">{data.personal.fullName || 'Nama Lengkap'}</h1>
+            <h1 className="text-3xl font-semibold capitalize">{data.personal.fullName || 'Nama Lengkap'}</h1>
             <p className="text-lg mt-1 font-semibold text-gray-800">{data.personal.position}</p>
+            
             <div className="flex flex-wrap justify-center items-center gap-2 text-sm mt-2 font-medium">
               {data.personal.domicile && <span>{data.personal.domicile}</span>}
               {data.personal.phone && <span>| {data.personal.phone}</span>}
               {data.personal.email && <span>| {data.personal.email}</span>}
             </div>
+
+            {/* SOCIAL LINKS - Diubah menjadi anchor link bersih dengan nama platform */}
             <div className="flex flex-wrap justify-center items-center gap-2 text-sm mt-1">
-              {data.personal.linkedin && <span>LinkedIn: {data.personal.linkedin}</span>}
-              {data.personal.socialLink && <span>| {data.personal.socialType}: {data.personal.socialLink}</span>}
-              {data.personal.portfolio && <span>| Portfolio: {data.personal.portfolio}</span>}
+              {[
+                data.personal.linkedin && (
+                  <a 
+                    key="linkedin" 
+                    href={data.personal.linkedin.startsWith('http') ? data.personal.linkedin : `https://${data.personal.linkedin}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline print:text-black font-medium"
+                  >
+                    LinkedIn
+                  </a>
+                ),
+                data.personal.socialLink && (
+                  <a 
+                    key="social" 
+                    href={data.personal.socialLink.startsWith('http') ? data.personal.socialLink : `https://${data.personal.socialLink}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline print:text-black font-medium"
+                  >
+                    {data.personal.socialType}
+                  </a>
+                ),
+                data.personal.portfolio && (
+                  <a 
+                    key="portfolio" 
+                    href={data.personal.portfolio.startsWith('http') ? data.personal.portfolio : `https://${data.personal.portfolio}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline print:text-black font-medium"
+                  >
+                    Portofolio
+                  </a>
+                )
+              ].filter(Boolean).reduce((prev, curr, i) => 
+                prev === null ? [curr] : [...prev, <span key={`sep-${i}`} className="text-gray-500 font-normal">|</span>, curr], 
+              null as any)}
             </div>
           </header>
 
@@ -303,14 +335,12 @@ export default function CVBuilderPage() {
             <section>
               <h2 className="text-sm font-bold uppercase border-b border-black mb-2 pb-1">Keahlian</h2>
               <div className="text-sm leading-snug space-y-1">
-                
                 {data.skills.main && data.skills.main !== '<p><br></p>' && (
                   <div className="mb-2">
                     <strong>Keahlian Utama:</strong>
                     <div className="mt-1 prose prose-sm max-w-none text-black prose-p:my-0 prose-ul:my-0 prose-li:my-0" dangerouslySetInnerHTML={{ __html: data.skills.main }} />
                   </div>
                 )}
-                
                 {data.skills.others && (<div><strong>Lainnya:</strong> {data.skills.others}</div>)}
                 {data.skills.languages && (<div><strong>Bahasa:</strong> {data.skills.languages}</div>)}
               </div>
