@@ -283,7 +283,7 @@ export default function CVBuilderPage() {
                     <span>{formatBulanTahun(exp.startDate)} {exp.startDate && '-'} {exp.endDate ? formatBulanTahun(exp.endDate) : (exp.startDate ? 'Saat ini' : '')}</span>
                   </div>
                   <div className="text-sm font-medium italic text-gray-800">{exp.company}</div>
-                  <div className="mt-1 text-sm prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: exp.description }} />
+                  <div className="mt-1 text-sm text-justify prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: exp.description }} />
                 </div>
               ))}
             </section>
@@ -303,7 +303,7 @@ export default function CVBuilderPage() {
                     {edu.documentLink && <a href={edu.documentLink} target="_blank" className="text-xs text-blue-600 underline print:text-black">Lihat Berkas</a>}
                   </div>
                   {edu.description && edu.description !== '<p><br></p>' && (
-                    <div className="mt-1 text-sm prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: edu.description }} />
+                    <div className="mt-1 text-sm text-justify prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: edu.description }} />
                   )}
                 </div>
               ))}
@@ -324,7 +324,7 @@ export default function CVBuilderPage() {
                   </div>
                   <div className="text-sm font-medium italic text-gray-800">{cert.organization}</div>
                   {cert.description && cert.description !== '<p><br></p>' && (
-                    <div className="mt-1 text-sm prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: cert.description }} />
+                    <div className="mt-1 text-sm text-justify prose prose-sm prose-p:my-0 prose-ul:my-0 prose-li:my-0 max-w-none text-black leading-snug" dangerouslySetInnerHTML={{ __html: cert.description }} />
                   )}
                 </div>
               ))}
